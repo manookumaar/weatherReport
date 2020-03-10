@@ -22,6 +22,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import retrofit2.Call
 import retrofit2.Response
 
 @RunWith(JUnit4::class)
@@ -36,8 +37,8 @@ class WeatherViewModelTest {
     val response = Response.success(data)
 
     private val validAppID = HashMap<String, String>().apply {
-        put("id", "iiiiii")
-        put("appid", "appid")
+        put("id", "2172797")
+        put("appid", "5ad7218f2e11df834b0eaf3a33a39d2a")
     }
     private val inValidAppID = HashMap<String, String>().apply {
         put("id", "asdf")
@@ -68,8 +69,8 @@ class WeatherViewModelTest {
 
         failedResponse = Response.error(500, responseBody)
 
-        //repository = WeatherRepository(service)
-        repository = mock()
+        repository = WeatherRepository(mock())
+        //repository = mock()
 
         runBlocking {
             whenever(repository.fetchCurrentWeatherReport(inValidAppID)).thenReturn(failedResponse)
@@ -84,7 +85,6 @@ class WeatherViewModelTest {
     @Test
     fun fetchReport() = runBlocking {
         viewModel.weatherData.observeForever(weatherData)
-        repository.service = service
 
         viewModel.fetchReport(validAppID)
         delay(10)

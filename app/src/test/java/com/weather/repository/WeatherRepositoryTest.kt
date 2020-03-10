@@ -23,8 +23,8 @@ class WeatherRepositoryTest {
     private lateinit var failedResponse : Response<WeatherData>
 
     private val validAppID = HashMap<String, String>().apply {
-        put("id", "iiiiii")
-        put("appid", "appid")
+        put("id", "2172797")
+        put("appid", "5ad7218f2e11df834b0eaf3a33a39d2a")
     }
     private val inValidAppID = HashMap<String, String>().apply {
         put("id", "asdf")
@@ -38,9 +38,11 @@ class WeatherRepositoryTest {
         failedResponse = error(500, responseBody)
 
         repository = WeatherRepository(service)
+        runBlocking {
+            whenever(repository.fetchCurrentWeatherReport(inValidAppID)).thenReturn(failedResponse)
+            whenever(repository.fetchCurrentWeatherReport(validAppID)).thenReturn(response)
+        }
 
-        whenever(repository.fetchCurrentWeatherReport(inValidAppID)).thenReturn(failedResponse)
-        whenever(repository.fetchCurrentWeatherReport(validAppID)).thenReturn(response)
     }
 
     @Test

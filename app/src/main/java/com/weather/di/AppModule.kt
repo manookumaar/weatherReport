@@ -7,8 +7,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val weatherRepostModule = module {
-    single { WeatherRepository(get()) }
 
+    single { WeatherRepository(get()) }
     viewModel { WeatherViewModel(get()) }
 
     single<RetroFitClient> { RetrofitClientImpl() }

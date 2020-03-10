@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.weather.R
+import com.weather.*
 import com.weather.databinding.LayoutWeatherReportBinding
-import com.weather.request
+import com.weather.repository.model.WeatherData
 import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent
 import java.util.concurrent.TimeUnit
@@ -35,9 +35,10 @@ class WeatherReportFragment : Fragment(), KoinComponent, LifecycleOwner {
             container, false
         )
 
-        bindingImpl.viewModel = viewModel
-
         viewModel.fetchReport(request)
+
+        bindingImpl.viewModel = viewModel
+        bindingImpl.lifecycleOwner = this
 
         context?.let {
 
@@ -50,6 +51,8 @@ class WeatherReportFragment : Fragment(), KoinComponent, LifecycleOwner {
                         if (workInfo != null) {
                             if(workInfo.state == WorkInfo.State.SUCCEEDED){
                                 Log.i("", "work SUCCEEDED")
+
+                               // viewModel.weatherData.value = (workInfo.outputData.keyValueMap.get("key") as WeatherData?)
 
                             }
                             Log.i("", "work info")

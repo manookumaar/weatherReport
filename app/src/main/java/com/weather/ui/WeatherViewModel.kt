@@ -1,23 +1,27 @@
 package com.weather.ui
 
-import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.weather.APP_ID
-import com.weather._ID_REQUEST
-import com.weather._KEY_APP_ID
-import com.weather._KEY_ID
 import com.weather.repository.WeatherRepository
 import com.weather.repository.model.WeatherData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class WeatherViewModel(val repository: WeatherRepository) : ViewModel(){
 
     val weatherData = MutableLiveData<WeatherData>()
 
-    fun fetchReport(request : HashMap<String, String>) {
-        val response = repository.fetchCurrentWeatherReport(request)
-        weatherData.value =response.body()
+    fun fetchReport(requestMap : Map<String, String>) {
+
+        GlobalScope.launch {
+            val response = repository.fetchCurrentWeatherReport(requestMap)
+            //response.enqueue(callback)
+            weatherData.postValue(response.body())
+            println(response)
+
+        }
+
     }
+
 
 }
